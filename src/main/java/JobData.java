@@ -151,4 +151,32 @@ public class JobData {
             e.printStackTrace();
         }
     }
+    public static ArrayList<String> alphabeticalSort(ArrayList<String> original) {
+        ArrayList<String> sorted = new ArrayList<>();
+        String lowest;
+        //make a copy - don't delete the original list
+        ArrayList<String> unsorted = new ArrayList<>();
+        unsorted.addAll(original);
+        for(int i = 0; i < original.size(); i++) {
+            lowest = lowestString(unsorted);
+            sorted.add(lowest);
+            unsorted.remove(lowest);
+        }
+
+        return sorted;
+    }
+    private static String lowestString(ArrayList<String> list) {
+        String lowest = list.get(0);
+        for (String str : list) {
+            lowest = strcmpr(str, lowest);
+        }
+        return lowest;
+    }
+    private static String strcmpr(String str1, String str2) {
+        if (str1.compareTo(str2) <= 0) {
+            return str1;
+        } else {
+            return str2;
+        }
+    }
 }
