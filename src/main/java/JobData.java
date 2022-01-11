@@ -5,10 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -43,7 +40,7 @@ public class JobData {
         }
 
         // Bonus mission: sort the results
-        Collections.sort(values);
+        alphabeticalSort(values);
 
         return values;
     }
@@ -54,7 +51,9 @@ public class JobData {
         loadData();
 
         // Bonus mission; normal version returns allJobs
-        return new ArrayList<>(allJobs);
+        ArrayList<HashMap<String, String>> allJobsCopy = new ArrayList<HashMap<String, String>>();
+        allJobsCopy.addAll(allJobs);
+        return allJobsCopy;
     }
 
     /**
@@ -79,7 +78,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase(Locale.ROOT).contains(value.toLowerCase(Locale.ROOT))) {
                 jobs.add(row);
             }
         }
@@ -98,8 +97,20 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        // TODO - implement this method
-        return null;
+        ArrayList<HashMap<String, String>> results = new ArrayList<>();
+
+        //for each job
+        for(HashMap<String, String> job : allJobs) {
+
+            //for each column
+            for(Map.Entry<String, String> column : job.entrySet()) {
+                if (column.getValue().toLowerCase(Locale.ROOT).contains(value.toLowerCase(Locale.ROOT)) && !results.contains(job)) {
+                    results.add(job);
+                }
+            }
+        }
+
+        return results;
     }
 
     /**
@@ -142,5 +153,32 @@ public class JobData {
             e.printStackTrace();
         }
     }
+    public static ArrayList<String> alphabeticalSort(ArrayList<String> original) {
+        ArrayList<String> sorted = new ArrayList<>();
+        String lowest;
+        //make a copy - don't delete the original list
+        ArrayList<String> unsorted = new ArrayList<>();
+        unsorted.addAll(original);
+        for(int i = 0; i < original.size(); i++) {
+            lowest = lowestString(unsorted);
+            sorted.add(lowest);
+            unsorted.remove(lowest);
+        }
 
+        return sorted;
+    }
+    private static String lowestString(ArrayList<String> list) {
+        String lowest = list.get(0);
+        for (String str : list) {
+            lowest = strcmpr(str, lowest);
+        }
+        return lowest;
+    }
+    private static String strcmpr(String str1, String str2) {
+        if (str1.compareTo(str2) <= 0) {
+            return str1;
+        } else {
+            return str2;
+        }
+    }
 }
