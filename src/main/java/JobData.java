@@ -40,7 +40,7 @@ public class JobData {
         }
 
         // Bonus mission: sort the results
-        Collections.sort(values);
+        alphabeticalSort(values);
 
         return values;
     }
@@ -51,7 +51,9 @@ public class JobData {
         loadData();
 
         // Bonus mission; normal version returns allJobs
-        return new ArrayList<>(allJobs);
+        ArrayList<HashMap<String, String>> allJobsCopy = new ArrayList<HashMap<String, String>>();
+        allJobsCopy.addAll(allJobs);
+        return allJobsCopy;
     }
 
     /**
